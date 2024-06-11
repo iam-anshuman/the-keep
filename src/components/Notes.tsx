@@ -29,9 +29,9 @@ function Notes() {
     const {notes} = useNote();
     const [loading,setLoading] = useState(true);
     const [currentPage,setCurrentPage] = useState(1);
-    const [currentNotes,setCurrentNotes] = useState<noteType[]>([]);
     const [pinnedNotes,setPinnedNotes] = useState<noteType[]>([]);
     const [unPinnedNotes,setUnPinnedNotes] = useState<noteType[]>([]);
+    const [currentUnPinnedNotes,setCurrentUnPinnedNotes] = useState<noteType[]>([]);
     const [updateNoteId,setUpdateNoteId] = useState<string | undefined>(undefined);
     const [openAddNote,setOpenAddNote] = useState<boolean>(false);
     const [openUpdateNote,setOpenUpdateNote] = useState<boolean>(false);
@@ -44,8 +44,8 @@ function Notes() {
             const pinnedNotes = notes.filter(note => note.Pinned);
             const unpinnedNotes = notes.filter(note => !note.Pinned);
             setUnPinnedNotes(unpinnedNotes);
-            const currentNotes = unpinnedNotes.slice(indexOfFirstNote,indexOfLastNote);
-            setCurrentNotes(currentNotes);
+            const currentPageNotes = unpinnedNotes.slice(indexOfFirstNote,indexOfLastNote);
+            setCurrentUnPinnedNotes(currentPageNotes);
             setPinnedNotes(pinnedNotes);
         }
 
@@ -137,7 +137,7 @@ function Notes() {
         {loading ? <p>Loading...</p> : 
             <>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5 my-6">
-                    {unPinnedNotes.map((note) => (
+                    {currentUnPinnedNotes.map((note) => (
                         <div key={note.id}>
                                 <Card className="w-full h-full dark:bg-slate-700 md:w-[25vw] cursor-pointer rounded relative group shadow-lg shadow-black/50 dark:shadow-slate-700" onClick={()=>{
                                         setUpdateNoteId(note.id)
